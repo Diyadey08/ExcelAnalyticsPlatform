@@ -5,6 +5,8 @@ const app = express();
 const routes = require("./routes");
 const multer = require('multer');
 const path = require('path');
+const XLSX = require('xlsx');
+const fs = require('fs');
 
 app.use(express.json());
 
@@ -43,9 +45,39 @@ app.post('/upload', upload.single('excel'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded or invalid file type.');
   }
+try {
+    const filePath = req.file.path;
 
-  res.send(`File uploaded: ${req.file.filename}`);
+    // Read the uploaded Excel file
+    const workbook = XLSX.readFile(filePath);
+
+    // // Get first sheet name
+    // const sheetName = workbook.SheetNames[0];
+
+    // // Convert sheet to JSON
+    // const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+     const result = {};
+
+    // Loop through all sheets
+    workbook.SheetNames.forEach((sheetName) => {
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet, { defval: null }); // include nulls for empty cells
+      result[sheetName] = data;
+    });
+    // Optional: Delete file after reading
+    fs.unlinkSync(filePath);
+
+    res.json({ sheets: result });
+  } catch (error) {
+    console.error('Error parsing Excel:', error);
+    res.status(500).json({ error: 'Error parsing Excel file.' });
+  }
+  
 });
+
+
+
 
 
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));
