@@ -7,11 +7,12 @@ const multer = require('multer');
 const path = require('path');
 const XLSX = require('xlsx');
 const fs = require('fs');
-
+const cors = require('cors');
 app.use(express.json());
 
 app.use("/api", routes);
 
+app.use(cors());
 
 const PORT = 3000;
 
