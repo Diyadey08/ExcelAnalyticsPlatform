@@ -1,4 +1,9 @@
 // index.js
+const Chart=require('./models/Chart')
+
+
+
+import mongoose from "mongoose";
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -40,6 +45,21 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({ storage, fileFilter });
+app.post("/save-chart", async (req, res) => {
+  const { userId, uploadId, chartType, xKey, yKey } = req.body;
+
+  const newChart = new Chart({
+    userId: new mongoose.Types.ObjectId(userId), 
+    uploadId: new mongoose.Types.ObjectId(uploadId),
+    chartType,
+    xKey,
+    yKey,
+  });
+
+  await newChart.save();
+
+  res.json({ message: "Chart saved" });
+});
 
 // Endpoint to upload file
 app.post('/upload', upload.single('excel'), (req, res) => {
