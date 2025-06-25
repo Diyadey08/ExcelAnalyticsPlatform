@@ -1,18 +1,19 @@
 // routes.js
-const express = require("express");
-const router = express.Router();
-const authController = require("./authController");
-const { verifyToken, restrictTo } = require("./middleware/authMiddleware");
+import express from "express";
+import {login} from "./authController.js";
+import { verifyToken, restrictTo } from "./middleware/authMiddleware.js";
 
-router.post("/login", authController.login);
+const router = express.Router();
+
+
+router.post("/login", login);
 
 // Protected routes
 router.get("/dashboard", verifyToken, (req, res) => {
-  res.send(`Welcome, ${req.user.email}`);
+  return res.send(`Welcome, ${req.user.email}`);
 });
 
 router.get("/admin-panel", verifyToken, restrictTo("admin"), (req, res) => {
-  res.send("Welcome to admin panel");
+  return res.send("Welcome to admin panel");
 });
-
-module.exports = router;
+export default router;

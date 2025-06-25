@@ -1,6 +1,6 @@
 // authController.js
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 const usersDB = [  // mock DB
   { id: 1, email: "user@example.com", password: bcrypt.hashSync("user123", 8), role: "user" },
@@ -15,7 +15,7 @@ const generateToken = (user) => {
   );
 };
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = usersDB.find((u) => u.email === email);

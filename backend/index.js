@@ -1,18 +1,16 @@
 // index.js
-const Chart=require('./models/Chart')
-
-
-
+import Chart from './models/Chart.js'
+import express from "express";
 import mongoose from "mongoose";
-require("dotenv").config();
-const express = require("express");
+import routes from "./routes.js";  
+import multer from 'multer';
+import path from 'path';
+import XLSX from 'xlsx';
+import fs from 'fs';  
+import cors from 'cors';
+import dotenv from "dotenv";
+dotenv.config();
 const app = express();
-const routes = require("./routes");
-const multer = require('multer');
-const path = require('path');
-const XLSX = require('xlsx');
-const fs = require('fs');
-const cors = require('cors');
 app.use(express.json());
 
 app.use("/api", routes);

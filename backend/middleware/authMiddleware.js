@@ -1,7 +1,7 @@
 // middleware/authMiddleware.js
-const jwt = require("jsonwebtoken");
 
-exports.verifyToken = (req, res, next) => {
+import jwt from "jsonwebtoken";
+export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
     return res.status(403).json({ message: "No token provided" });
@@ -18,7 +18,7 @@ exports.verifyToken = (req, res, next) => {
   }
 };
 
-exports.restrictTo = (role) => (req, res, next) => {
+export const restrictTo = (role) => (req, res, next) => {
   if (req.user.role !== role) {
     return res.status(403).json({ message: "Access denied: insufficient role" });
   }

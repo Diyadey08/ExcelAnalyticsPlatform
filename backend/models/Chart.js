@@ -1,4 +1,5 @@
 // models/Chart.js
+import mongoose from "mongoose";
 const chartSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
   uploadId: mongoose.Schema.Types.ObjectId,

@@ -1,4 +1,5 @@
 // models/Upload.js
+import mongoose from "mongoose";
 const uploadSchema = new mongoose.Schema({
   userId: mongoose.Schema.Types.ObjectId,
   fileName: String,
