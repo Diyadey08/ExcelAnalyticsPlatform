@@ -9,15 +9,23 @@ import XLSX from 'xlsx';
 import fs from 'fs';  
 import cors from 'cors';
 import dotenv from "dotenv";
+import authRoutes from "./routes/authRoutes.js"
 dotenv.config();
 const app = express();
 app.use(express.json());
 
 app.use("/api", routes);
+app.use("/api", authRoutes);      // Auth routes (login, register)
 
 app.use(cors());
 
 const PORT = 3000;
+// 📌 MongoDB Connection
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // Configure storage for uploaded files
 const storage = multer.diskStorage({

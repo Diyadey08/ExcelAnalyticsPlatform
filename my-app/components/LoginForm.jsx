@@ -1,55 +1,36 @@
-// client/components/LoginForm.jsx
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-const LoginForm = () => {
+export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e, type = "login") => {
     e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:3000/api/login", {
-        email,
-        password,
-      });
 
-      localStorage.setItem("token", res.data.token);
-      setMessage("Login successful!");
-      navigate("/dashboard");
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Login failed");
+    const res = await fetch(`http://localhost:3000/api/${type}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      localStorage.setItem("token", data.token);
+      alert(`${type === "login" ? "Logged in" : "Registered"} successfully`);
+    } else {
+      alert(data.message || "Something went wrong");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <br />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <br />
-        <button type="submit">Login</button>
+    <div className="p-6 max-w-sm mx-auto">
+      <h2 className="text-xl font-semibold mb-4">Login / Register</h2>
+      <form className="space-y-3">
+        <input type="email" className="border p-2 w-full" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+        <input type="password" className="border p-2 w-full" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        <button onClick={(e) => handleSubmit(e, "login")} className="bg-blue-500 text-white px-4 py-2 rounded w-full">Login</button>
+        <button onClick={(e) => handleSubmit(e, "register")} className="bg-green-500 text-white px-4 py-2 rounded w-full">Register</button>
       </form>
     </div>
   );
-};
-
-export default LoginForm;
+}
