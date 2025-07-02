@@ -1,0 +1,3 @@
+/* If not using Tailwind's build process, import the compiled CSS instead */
+
+@import "tailwindcss";
