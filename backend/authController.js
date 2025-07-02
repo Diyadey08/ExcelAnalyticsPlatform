@@ -43,7 +43,17 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
 
     const token = generateToken(user);
-    res.json({ token, user: { email: user.email, role: user.role } });
+  // ✅ Set JWT cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // set to true in production (HTTPS)
+      sameSite: "Lax",
+     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days// 1 hour
+    });
+
+    res.json({ message: "Login successful", user: { email: user.email, role: user.role } });
+    console.log(token);
+    
   } catch (error) {
     res.status(500).json({ message: "Login failed", error });
   }

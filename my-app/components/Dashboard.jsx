@@ -1,29 +1,40 @@
-// client/components/Dashboard.jsx
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 
-const Dashboard = () => {
-  const [data, setData] = useState("");
+export default function Dashboard() {
+  const [uploads, setUploads] = useState([]);
+  const [History, setHistory] = useState([]);
+useEffect(() => {
+  const fetchHistory = async () => {
+    const res = await fetch("http://localhost:3000/user/history", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const json = await res.json();
+    setHistory(json);
+  };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  fetchHistory();
+}, []);
 
-    axios
-      .get("http://localhost:3000/api/dashboard", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => setData(res.data))
-      .catch(() => setData("Access denied or not logged in"));
-  }, []);
 
   return (
-    <div>
-      <h2>Dashboard</h2>
-      <p>{data}</p>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">📂 Upload History</h2>
+
+      <p>Total uploads: {uploads.length}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        {uploads.map((upload) => (
+          <div key={upload._id} className="p-4 border rounded shadow">
+            <h3 className="font-semibold">{upload.fileName}</h3>
+            <p className="text-sm text-gray-600">
+              Uploaded: {new Date(upload.uploadedAt).toLocaleString()}
+            </p>
+            <p className="text-sm">Size: {upload.sizeKB} KB</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default Dashboard;
+}

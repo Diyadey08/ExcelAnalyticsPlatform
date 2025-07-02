@@ -2,6 +2,8 @@ import React from 'react';
 import Home from '../components/DisChart.jsx';
 import History from '../components/History';
 import LoginPage from '../components/LoginForm.jsx';
+import Dashboard from '../components/Dashboard.jsx';
+import { isLoggedIn } from "./utils/auth";
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 
 function App() {
@@ -12,6 +14,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<LoginPage />} />
+        <Route path="/history" element={isLoggedIn() ? <History userId={userId} /> : <Navigate to="/login" />} />
+         <Route path="/dashboard" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
@@ -47,6 +51,8 @@ function Navbar() {
         >
           Register
         </Link>
+        <Link to="/history">Chart History</Link>
+
       </div>
     </nav>
   );

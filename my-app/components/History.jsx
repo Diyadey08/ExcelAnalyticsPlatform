@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import React from "react";
-export default function History({ userId }) {
+export default function History( ) {
   const [charts, setCharts] = useState([]);
-
+ const userId = localStorage.getItem("userId");
   useEffect(() => {
     axios.get(`/api/user-history?userId=${userId}`).then((res) => {
       setCharts(res.data);
