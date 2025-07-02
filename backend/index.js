@@ -13,11 +13,11 @@ import authRoutes from "./routes/authRoutes.js"
 dotenv.config();
 const app = express();
 app.use(express.json());
-
-app.use("/api", routes);
-app.use("/api", authRoutes);      // Auth routes (login, register)
-
 app.use(cors());
+app.use("/api", routes);
+app.use("/api-auth", authRoutes);      // Auth routes (login, register)
+
+
 
 const PORT = 3000;
 // 📌 MongoDB Connection
@@ -29,15 +29,16 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Configure storage for uploaded files
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Make sure 'uploads' folder exists
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
   },
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
     const name = path.basename(file.originalname, ext);
     cb(null, `${name}-${Date.now()}${ext}`);
-  },
+  }
 });
+
 
 // Filter to accept only Excel files
 const fileFilter = (req, file, cb) => {
