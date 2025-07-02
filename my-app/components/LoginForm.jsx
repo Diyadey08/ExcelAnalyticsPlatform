@@ -21,9 +21,12 @@ export default function LoginPage() {
 
     const data = await res.json();
     if (res.ok) {
-      alert(`${mode === "login" ? "Logged in" : "Registered"} successfully`);
-      navigate("/"); // ✅ redirect after login
-    } else {
+  const { userId } = data;
+  localStorage.setItem("userId", userId); // ✅ store userId in localStorage
+  alert(`${mode === "login" ? "Logged in" : "Registered"} successfully`);
+  navigate("/"); // ✅ redirect after login
+}
+else {
       alert(data.message || "Something went wrong");
     }
   };

@@ -14,9 +14,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<LoginPage />} />
-        <Route path="/history" element={isLoggedIn() ? <History userId={userId} /> : <Navigate to="/login" />} />
+        {/* //<Route path="/history" element={isLoggedIn() ? <History userId={userId} /> : <Navigate to="/login" />} />
          <Route path="/dashboard" element={isLoggedIn() ? <Dashboard /> : <Navigate to="/login" />} />
-      </Routes>
+      
+      */}
+      </Routes> 
     </Router>
   );
 }
