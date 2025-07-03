@@ -96,7 +96,7 @@ app.post("/upload", verifyToken, upload.single("excel"), async (req, res) => {
     const selectedSheetName = workbook.SheetNames[0];
     const selectedData = result[selectedSheetName];
 
-    const record = new ExcelRecord({
+    const record = new ExcelRecod({
       user: req.user.id,
       fileName: req.file.originalname,
       sizeKB: req.file.size / 1024,
@@ -113,7 +113,7 @@ app.post("/upload", verifyToken, upload.single("excel"), async (req, res) => {
 });
 
 app.get('/user/history', verifyToken, async (req, res) => {
-  const records = await ExcelRecord.find({ user: req.user.id })
+  const records = await ExcelRecod.find({ user: req.user.id })
     .sort({ uploadedAt: -1 })
     .select('-data'); // exclude full data
   res.json(records);

@@ -24,7 +24,7 @@ export const register = async (req, res) => {
     await newUser.save();
 
     const token = generateToken(newUser);
-    res.status(201).json({ token, user: { email, role } });
+    res.status(201).json({ token, user: { email, role },id: newUser._id  });
   } catch (error) {
     res.status(500).json({ message: "Registration failed", error });
   }
@@ -51,7 +51,7 @@ export const login = async (req, res) => {
      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days// 1 hour
     });
 
-    res.json({ message: "Login successful", user: { email: user.email, role: user.role } });
+    res.json({ message: "Login successful", token,  user: { email: user.email, role: user.role } });
     console.log(token);
     
   } catch (error) {
