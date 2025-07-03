@@ -78,7 +78,7 @@ app.post("/save-chart", verifyToken, async (req, res) => {
 // Endpoint to upload file
 app.post("/upload", verifyToken, upload.single("excel"), async (req, res) => {
   if (!req.file) return res.status(400).send("No file uploaded");
-
+console.log("Authenticated user:", req.user);  
   try {
     const filePath = req.file.path;
     const workbook = XLSX.readFile(filePath);
@@ -120,12 +120,15 @@ app.get('/user/history', verifyToken, async (req, res) => {
 });
 
 app.get("/api/user-history", verifyToken, async (req, res) => {
-  const { userId } = req.query;
+  try {
+    const charts = await Chart.find({ userId: req.user.id })
+      .populate("uploadId", "fileName")
+      .sort({ createdAt: -1 });
 
-  const charts = await Chart.find({ userId })
-    .populate("uploadId", "fileName") // get file name from ExcelRecord
-    .sort({ createdAt: -1 });
-
-  res.json(charts);
+    res.json(charts);
+  } catch (err) {
+    console.error("Error fetching chart history:", err);
+    res.status(500).json({ error: "Failed to fetch chart history" });
+  }
 });
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));
