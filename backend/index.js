@@ -13,6 +13,9 @@ import authRoutes from "./routes/authRoutes.js"
 import cookieParser from "cookie-parser";
 import { verifyToken } from "./middleware/authMiddleware.js";
 import ExcelRecod from './models/ExcelRecod.js';
+import User from './models/User.js';
+import jwt from "jsonwebtoken";
+
 
 dotenv.config();
 const app = express();
@@ -80,6 +83,15 @@ app.post("/upload", verifyToken, upload.single("excel"), async (req, res) => {
   if (!req.file) return res.status(400).send("No file uploaded");
 console.log("Authenticated user:", req.user);  
   try {
+     const { token } = req.body;
+
+    // 🔐 Verify token from request body
+    if (!token) return res.status(403).json({ message: "No token provided" });
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const userId = decoded.id;
+      const userId = req.user.id;
+    if (!req.file) return res.status(400).send("No file uploaded");
+
     const filePath = req.file.path;
     const workbook = XLSX.readFile(filePath);
     const result = {};
@@ -97,7 +109,7 @@ console.log("Authenticated user:", req.user);
     const selectedData = result[selectedSheetName];
 
     const record = new ExcelRecod({
-      user: req.user.id,
+      user: userId,
       fileName: req.file.originalname,
       sizeKB: req.file.size / 1024,
       data: selectedData,
