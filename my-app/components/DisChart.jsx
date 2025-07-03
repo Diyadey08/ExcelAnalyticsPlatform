@@ -16,6 +16,9 @@ export default function Home() {
     const form = new FormData();
     form.append("excel", file);
 
+     const token = localStorage.getItem("token"); // ✅ Get token
+  form.append("token", token); // ✅ Send token in body
+
     try {
       const res = await fetch("http://localhost:3000/upload", {
         method: "POST",
