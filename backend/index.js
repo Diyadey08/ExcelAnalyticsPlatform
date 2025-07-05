@@ -131,16 +131,40 @@ app.get('/user/history', verifyToken, async (req, res) => {
   res.json(records);
 });
 
-app.get("/api/user-history", verifyToken, async (req, res) => {
-  try {
-    const charts = await Chart.find({ userId: req.user.id })
-      .populate("uploadId", "fileName")
-      .sort({ createdAt: -1 });
 
-    res.json(charts);
+
+// ✅ Delete an uploaded ExcelRecord by ID
+app.delete("/upload/:id", verifyToken, async (req, res) => {
+  try {
+    const recordId = req.params.id;
+
+    // Ensure the user owns the record before deleting
+    const record = await ExcelRecod.findOne({ _id: recordId, user: req.user.id });
+    if (!record) {
+      return res.status(404).json({ message: "Record not found or unauthorized" });
+    }
+
+    await ExcelRecod.deleteOne({ _id: recordId });
+    res.json({ message: "Upload deleted successfully" });
   } catch (err) {
-    console.error("Error fetching chart history:", err);
-    res.status(500).json({ error: "Failed to fetch chart history" });
+    console.error("Delete error:", err);
+    res.status(500).json({ error: "Failed to delete record" });
   }
 });
+// ✅ Get full ExcelRecord data by ID
+app.get("/upload/:id", verifyToken, async (req, res) => {
+  try {
+    const record = await ExcelRecod.findOne({
+      _id: req.params.id,
+      user: req.user.id,
+    });
+
+    if (!record) return res.status(404).json({ message: "Not found" });
+    res.json(record);
+  } catch (err) {
+    console.error("Error loading Excel data:", err);
+    res.status(500).json({ error: "Failed to fetch record" });
+  }
+});
+
 app.listen(3000, () => console.log("Server running on http://localhost:3000"));

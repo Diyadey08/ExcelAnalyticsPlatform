@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Chart2D from "../components/Chart2D"
 import Chart3D from "../components/Chart3D"
 import React from "react"
-// Icon components (you can replace these with any icon library or SVGs)
+// Icon components
 const Upload = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path
@@ -100,6 +100,224 @@ const Eye = ({ className }) => (
   </svg>
 )
 
+const AlertTriangle = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"
+    />
+  </svg>
+)
+
+const Lock = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+    />
+  </svg>
+)
+
+const User = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+    />
+  </svg>
+)
+
+const X = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  </svg>
+)
+
+const CheckCircle = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+    />
+  </svg>
+)
+
+// Error Modal Component
+const ErrorModal = ({ isOpen, onClose, title, message, type = "error", actionButton = null }) => {
+  if (!isOpen) return null
+
+  const getIcon = () => {
+    switch (type) {
+      case "warning":
+        return <AlertTriangle className="w-12 h-12 text-amber-500" />
+      case "auth":
+        return <Lock className="w-12 h-12 text-red-500" />
+      case "success":
+        return <CheckCircle className="w-12 h-12 text-green-500" />
+      default:
+        return <AlertTriangle className="w-12 h-12 text-red-500" />
+    }
+  }
+
+  const getColors = () => {
+    switch (type) {
+      case "warning":
+        return {
+          bg: "from-amber-50 to-orange-50",
+          border: "border-amber-200",
+          text: "text-amber-800",
+        }
+      case "auth":
+        return {
+          bg: "from-red-50 to-pink-50",
+          border: "border-red-200",
+          text: "text-red-800",
+        }
+      case "success":
+        return {
+          bg: "from-green-50 to-emerald-50",
+          border: "border-green-200",
+          text: "text-green-800",
+        }
+      default:
+        return {
+          bg: "from-red-50 to-pink-50",
+          border: "border-red-200",
+          text: "text-red-800",
+        }
+    }
+  }
+
+  const colors = getColors()
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+      <div className="relative w-full max-w-md">
+        <div
+          className={`bg-gradient-to-br ${colors.bg} ${colors.border} border-2 rounded-2xl shadow-2xl transform transition-all duration-300 scale-100`}
+        >
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-1 rounded-full hover:bg-white/50 transition-colors"
+          >
+            <X className="w-5 h-5 text-gray-500" />
+          </button>
+
+          {/* Content */}
+          <div className="p-8 text-center">
+            {/* Icon */}
+            <div className="flex justify-center mb-4">{getIcon()}</div>
+
+            {/* Title */}
+            <h3 className={`text-xl font-bold ${colors.text} mb-3`}>{title}</h3>
+
+            {/* Message */}
+            <p className="text-gray-600 mb-6 leading-relaxed">{message}</p>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 justify-center">
+              {actionButton}
+              <button
+                onClick={onClose}
+                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Login Redirect Component
+const LoginRedirect = ({ isVisible, onCancel, onLogin }) => {
+  const [countdown, setCountdown] = useState(5)
+
+  useEffect(() => {
+    if (!isVisible) return
+
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer)
+          onLogin()
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [isVisible, onLogin])
+
+  if (!isVisible) return null
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="relative w-full max-w-lg">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl shadow-2xl transform transition-all duration-300">
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6 rounded-t-2xl">
+            <div className="flex items-center justify-center gap-3">
+              <User className="w-8 h-8" />
+              <h3 className="text-2xl font-bold">Authentication Required</h3>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-8 text-center">
+            <div className="mb-6">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Lock className="w-8 h-8 text-blue-600" />
+              </div>
+              <p className="text-gray-700 text-lg mb-2">You need to be logged in to upload files</p>
+              <p className="text-gray-500">
+                Redirecting to login page in <span className="font-bold text-blue-600 text-xl">{countdown}</span>{" "}
+                seconds...
+              </p>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+              <div
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 h-2 rounded-full transition-all duration-1000 ease-linear"
+                style={{ width: `${((5 - countdown) / 5) * 100}%` }}
+              ></div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={onLogin}
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                Go to Login Now
+              </button>
+              <button
+                onClick={onCancel}
+                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Home() {
   const [sheets, setSheets] = useState({})
   const [selectedSheet, setSelectedSheet] = useState("")
@@ -108,14 +326,50 @@ export default function Home() {
   const [chart3DType, setChart3DType] = useState("points")
   const [isUploading, setIsUploading] = useState(false)
 
+  // Error and Auth states
+  const [errorModal, setErrorModal] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "error",
+  })
+  const [showLoginRedirect, setShowLoginRedirect] = useState(false)
+
+  const showError = (title, message, type = "error") => {
+    setErrorModal({
+      isOpen: true,
+      title,
+      message,
+      type,
+    })
+  }
+
+  const closeError = () => {
+    setErrorModal({
+      isOpen: false,
+      title: "",
+      message: "",
+      type: "error",
+    })
+  }
+
+  const handleLoginRedirect = () => {
+    window.location.href = "/login"
+  }
+
   const handleUpload = async (e) => {
     const file = e.target.files[0]
     if (!file) return
 
+    const token = localStorage.getItem("token")
+    if (!token) {
+      setShowLoginRedirect(true)
+      return
+    }
+
     setIsUploading(true)
     const form = new FormData()
     form.append("excel", file)
-    const token = localStorage.getItem("token")
     form.append("token", token)
 
     try {
@@ -125,10 +379,37 @@ export default function Home() {
         credentials: "include",
       })
 
+      if (res.status === 403) {
+        setShowLoginRedirect(true)
+        return
+      }
+
       if (!res.ok) {
         const errorText = await res.text()
         console.error("Upload failed:", res.status, errorText)
-        alert(`Upload failed: ${res.status}`)
+
+        // Show different error messages based on status
+        switch (res.status) {
+          case 400:
+            showError(
+              "Invalid File",
+              "The uploaded file is not a valid Excel file. Please upload a .xlsx or .xls file.",
+              "warning",
+            )
+            break
+          case 413:
+            showError(
+              "File Too Large",
+              "The uploaded file is too large. Please upload a smaller file (max 10MB).",
+              "warning",
+            )
+            break
+          case 500:
+            showError("Server Error", "There was a problem processing your file. Please try again later.", "error")
+            break
+          default:
+            showError("Upload Failed", `Upload failed with status ${res.status}. Please try again.`, "error")
+        }
         return
       }
 
@@ -137,9 +418,20 @@ export default function Home() {
       setSelectedSheet("")
       setXKey("")
       setYKey("")
+
+      // Show success message
+      showError(
+        "Upload Successful! 🎉",
+        "Your Excel file has been processed successfully. You can now select sheets and create visualizations.",
+        "success",
+      )
     } catch (err) {
       console.error("Upload error", err)
-      alert("Upload failed: Check file or server")
+      showError(
+        "Connection Error",
+        "Failed to connect to the server. Please check your internet connection and try again.",
+        "error",
+      )
     } finally {
       setIsUploading(false)
     }
@@ -393,6 +685,22 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      {/* Error Modal */}
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        onClose={closeError}
+        title={errorModal.title}
+        message={errorModal.message}
+        type={errorModal.type}
+      />
+
+      {/* Login Redirect Modal */}
+      <LoginRedirect
+        isVisible={showLoginRedirect}
+        onCancel={() => setShowLoginRedirect(false)}
+        onLogin={handleLoginRedirect}
+      />
     </div>
   )
 }
