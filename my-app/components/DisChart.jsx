@@ -455,43 +455,117 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <div className="flex items-center justify-center gap-3">
-            <div className="p-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg">
-              <FileSpreadsheet className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Excel Chart Visualizer
-            </h1>
+        <div className="relative text-center space-y-6 py-8">
+          {/* Background decoration */}
+          <div className="absolute inset-0 -z-10">
+            <div className="absolute top-10 left-1/4 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl"></div>
+            <div className="absolute top-20 right-1/4 w-96 h-96 bg-indigo-400/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-10 left-1/3 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl"></div>
           </div>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Upload your Excel files and create stunning 2D and 3D visualizations with ease
-          </p>
+
+          {/* Main header content */}
+          <div className="relative">
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl blur-lg opacity-75 animate-pulse"></div>
+                <div className="relative p-4 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                  <FileSpreadsheet className="w-10 h-10 text-white" />
+                </div>
+              </div>
+              <div className="text-left">
+                <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+                  Excel Chart
+                </h1>
+                <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent leading-tight">
+                  Visualizer
+                </h1>
+              </div>
+            </div>
+
+            {/* Tagline with enhanced styling */}
+            <div className="relative mb-8">
+              <div className="inline-block">
+                <p className="text-2xl md:text-3xl font-semibold text-gray-700 mb-2">
+                  Visualization made
+                  <span className="relative ml-2">
+                    <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent font-bold">
+                      simpler
+                    </span>
+                    <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transform scale-x-0 animate-[scaleX_2s_ease-in-out_infinite] origin-left"></div>
+                  </span>
+                </p>
+                <p className="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
+                  Transform your Excel data into stunning 2D and 3D visualizations with just a few clicks. No complex
+                  setup, no learning curve – just beautiful charts in seconds.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature highlights */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border border-white/20 shadow-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-gray-700">Instant Upload</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border border-white/20 shadow-lg">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-gray-700">2D & 3D Charts</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-full border border-white/20 shadow-lg">
+                <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-gray-700">Interactive Design</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Upload Section */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-xl border-0 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100">
+        {/* Enhanced Upload Section */}
+        <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
+
+          <div className="px-8 py-6 border-b border-gray-100/50">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold flex items-center justify-center gap-2">
-                <Upload className="w-6 h-6 text-blue-600" />
-                Upload Excel File
-              </h2>
-              <p className="text-gray-600 mt-1">Select an Excel file to start creating beautiful charts</p>
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl mb-4">
+                <Upload className="w-8 h-8 text-blue-600" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">Upload Your Excel File</h2>
+              <p className="text-gray-600 text-lg">Drop your file below and watch the magic happen ✨</p>
             </div>
           </div>
-          <div className="p-6">
+
+          <div className="p-8">
             <div className="flex items-center justify-center w-full">
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-blue-300 rounded-xl cursor-pointer bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transition-all duration-300">
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload
-                    className={`w-10 h-10 mb-3 ${isUploading ? "animate-bounce text-blue-600" : "text-gray-400"}`}
-                  />
-                  <p className="mb-2 text-sm text-gray-500">
-                    <span className="font-semibold">Click to upload</span> or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-500">Excel files (.xlsx, .xls)</p>
+              <label className="relative flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-blue-300 rounded-2xl cursor-pointer bg-gradient-to-br from-blue-50/50 via-indigo-50/50 to-purple-50/50 hover:from-blue-100/50 hover:via-indigo-100/50 hover:to-purple-100/50 transition-all duration-500 group overflow-hidden">
+                {/* Animated background */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 via-indigo-400/5 to-purple-400/5 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+
+                <div className="relative flex flex-col items-center justify-center pt-6 pb-6 z-10">
+                  <div className="relative mb-4">
+                    <div
+                      className={`absolute inset-0 rounded-full ${isUploading ? "bg-blue-400/20 animate-ping" : ""}`}
+                    ></div>
+                    <Upload
+                      className={`relative w-12 h-12 mb-3 transition-all duration-300 ${
+                        isUploading
+                          ? "animate-bounce text-blue-600 scale-110"
+                          : "text-gray-400 group-hover:text-blue-500 group-hover:scale-110"
+                      }`}
+                    />
+                  </div>
+
+                  <div className="text-center">
+                    <p className="mb-2 text-lg font-semibold text-gray-700 group-hover:text-gray-800 transition-colors">
+                      <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                        Click to upload
+                      </span>{" "}
+                      or drag and drop
+                    </p>
+                    <p className="text-sm text-gray-500 mb-2">Excel files (.xlsx, .xls)</p>
+                    <p className="text-xs text-gray-400">Maximum file size: 10MB</p>
+                  </div>
                 </div>
+
                 <input
                   type="file"
                   className="hidden"
@@ -501,11 +575,22 @@ export default function Home() {
                 />
               </label>
             </div>
+
             {isUploading && (
-              <div className="mt-4 text-center">
-                <div className="inline-flex items-center gap-2 text-blue-600">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                  Processing your file...
+              <div className="mt-6 text-center">
+                <div className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-full border border-blue-200">
+                  <div className="relative">
+                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
+                    <div className="absolute inset-0 animate-ping rounded-full h-5 w-5 border border-blue-400 opacity-20"></div>
+                  </div>
+                  <span className="text-blue-700 font-medium">Processing your file...</span>
+                </div>
+
+                {/* Progress bar */}
+                <div className="mt-4 w-full max-w-md mx-auto">
+                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div className="h-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full animate-[loading_2s_ease-in-out_infinite]"></div>
+                  </div>
                 </div>
               </div>
             )}
@@ -701,6 +786,24 @@ export default function Home() {
         onCancel={() => setShowLoginRedirect(false)}
         onLogin={handleLoginRedirect}
       />
+
+      {/* Custom CSS animations */}
+      <style jsx>{`
+        @keyframes scaleX {
+          0%, 100% { transform: scaleX(0); }
+          50% { transform: scaleX(1); }
+        }
+
+        @keyframes loading {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+
+        .bg-grid-pattern {
+          background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
+          background-size: 20px 20px;
+        }
+      `}</style>
     </div>
   )
 }

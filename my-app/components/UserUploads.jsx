@@ -171,9 +171,8 @@ export default function UserUploads() {
   const fetchUploads = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch("http://localhost:3000/user/history", {
-        credentials: "include",
-      })
+      const res = await fetch("http://localhost:3000/user/history", 
+      )
       const json = await res.json()
       setUploads(json)
     } catch (error) {
@@ -187,7 +186,7 @@ export default function UserUploads() {
     try {
       await fetch(`http://localhost:3000/upload/${id}`, {
         method: "DELETE",
-        credentials: "include",
+        
       })
       setSelectedRecord(null)
       fetchUploads()
@@ -199,9 +198,7 @@ export default function UserUploads() {
 
   const viewUpload = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/upload/${id}`, {
-      credentials: "include",
-    });
+    const res = await fetch(`http://localhost:3000/upload/${id}`)
     const json = await res.json();
     setSelectedRecord(json);
     setXKey("");

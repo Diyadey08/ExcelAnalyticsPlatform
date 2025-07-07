@@ -20,10 +20,7 @@ import jwt from "jsonwebtoken";
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: "http://localhost:5173", // exact origin of frontend
-  credentials: true                // allow sending of cookies
-}));
+app.use(cors());
 app.use(cookieParser());
 app.use("/api", routes);
 app.use("/api-auth", authRoutes);      // Auth routes (login, register)
@@ -123,7 +120,9 @@ console.log("Authenticated user:", req.user);
     res.status(500).json({ error: "Error processing Excel file" });
   }
 });
-
+app.get('/',(req, res) => {
+  res.send('Welcome to the Excel Charts API');
+});
 app.get('/user/history', verifyToken, async (req, res) => {
   const records = await ExcelRecod.find({ user: req.user.id })
     .sort({ uploadedAt: -1 })
