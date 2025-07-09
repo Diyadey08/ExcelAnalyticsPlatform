@@ -170,7 +170,7 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const res = await fetch(`http://localhost:3000/api-auth/${mode}`, {
+      const res = await fetch(`https://excelanalyticsplatform.onrender.com/api-auth/${mode}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

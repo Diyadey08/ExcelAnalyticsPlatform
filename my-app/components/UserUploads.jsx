@@ -171,7 +171,7 @@ export default function UserUploads() {
   const fetchUploads = async () => {
     setIsLoading(true)
     try {
-      const res = await fetch("http://localhost:3000/user/history", 
+      const res = await fetch("https://excelanalyticsplatform.onrender.com/user/history", 
       )
       const json = await res.json()
       setUploads(json)
@@ -184,7 +184,7 @@ export default function UserUploads() {
 
   const deleteUpload = async (id) => {
     try {
-      await fetch(`http://localhost:3000/upload/${id}`, {
+      await fetch(`https://excelanalyticsplatform.onrender.com/upload/${id}`, {
         method: "DELETE",
         
       })
@@ -198,7 +198,7 @@ export default function UserUploads() {
 
   const viewUpload = async (id) => {
   try {
-    const res = await fetch(`http://localhost:3000/upload/${id}`)
+    const res = await fetch(`https://excelanalyticsplatform.onrender.com/upload/${id}`)
     const json = await res.json();
     setSelectedRecord(json);
     setXKey("");

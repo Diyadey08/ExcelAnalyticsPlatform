@@ -37,7 +37,7 @@ function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    await fetch("http://localhost:3000/api-auth/logout", {
+    await fetch("https://excelanalyticsplatform.onrender.com/api-auth/logout", {
       method: "POST",
       
     });

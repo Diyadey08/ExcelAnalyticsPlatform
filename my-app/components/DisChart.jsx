@@ -373,10 +373,9 @@ export default function Home() {
     form.append("token", token)
 
     try {
-      const res = await fetch("http://localhost:3000/upload", {
+      const res = await fetch("https://excelanalyticsplatform.onrender.com/upload", {
         method: "POST",
         body: form,
-        credentials: "include",
       })
 
       if (res.status === 403) {

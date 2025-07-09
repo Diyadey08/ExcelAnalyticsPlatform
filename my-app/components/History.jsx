@@ -7,7 +7,7 @@ export default function History() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/user-history")
+      .get("https://excelanalyticsplatform.onrender.com/api/user-history")
       .then((res) => {
         setCharts(res.data);
       })

@@ -21,7 +21,14 @@ const ExcelRecordSchema = new mongoose.Schema({
   uploadedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  ipfsHash: {
+  type: String
+},
+pinataUrl: {
+  type: String
+}
+
 });
 
 export default mongoose.model('ExcelRecord', ExcelRecordSchema);

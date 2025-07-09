@@ -5,7 +5,7 @@ export default function Dashboard() {
   const [History, setHistory] = useState([]);
 useEffect(() => {
   const fetchHistory = async () => {
-    const res = await fetch("http://localhost:3000/user/history", {
+    const res = await fetch("https://excelanalyticsplatform.onrender.com/user/history", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

@@ -15,12 +15,14 @@ import { verifyToken } from "./middleware/authMiddleware.js";
 import ExcelRecod from './models/ExcelRecod.js';
 import User from './models/User.js';
 import jwt from "jsonwebtoken";
-
+import { uploadFileToPinata } from './utils/pinataUpload.js';
 
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(cookieParser());
 app.use("/api", routes);
 app.use("/api-auth", authRoutes);      // Auth routes (login, register)
@@ -78,16 +80,10 @@ app.post("/save-chart", verifyToken, async (req, res) => {
 // Endpoint to upload file
 app.post("/upload", verifyToken, upload.single("excel"), async (req, res) => {
   if (!req.file) return res.status(400).send("No file uploaded");
-console.log("Authenticated user:", req.user);  
-  try {
-     const { token } = req.body;
+  console.log("Authenticated user:", req.user);
 
-    // 🔐 Verify token from request body
-    if (!token) return res.status(403).json({ message: "No token provided" });
-    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // const userId = decoded.id;
-      const userId = req.user.id;
-    if (!req.file) return res.status(400).send("No file uploaded");
+  try {
+    const userId = req.user.id;
 
     const filePath = req.file.path;
     const workbook = XLSX.readFile(filePath);
@@ -99,25 +95,26 @@ console.log("Authenticated user:", req.user);
       result[sheetName] = data;
     });
 
-    fs.unlinkSync(filePath); // Optional: cleanup uploaded file
-
-    // Save only selected sheet's data
     const selectedSheetName = workbook.SheetNames[0];
     const selectedData = result[selectedSheetName];
+
+    const pinataRes = await uploadFileToPinata(filePath);
+    fs.unlinkSync(filePath); // Cleanup
 
     const record = new ExcelRecod({
       user: userId,
       fileName: req.file.originalname,
       sizeKB: req.file.size / 1024,
       data: selectedData,
+      ipfsHash: pinataRes.IpfsHash,
+      pinataUrl: `https://gateway.pinata.cloud/ipfs/${pinataRes.IpfsHash}`
     });
 
     await record.save();
-
-    res.json({ sheets: result });
+    res.json({ sheets: result, ipfsHash: pinataRes.IpfsHash });
   } catch (err) {
     console.error("Upload error:", err);
-    res.status(500).json({ error: "Error processing Excel file" });
+    res.status(500).json({ error: "Error uploading to Pinata" });
   }
 });
 app.get('/',(req, res) => {
